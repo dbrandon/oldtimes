@@ -1,0 +1,67 @@
+body {
+  background-color: rgb(146, 146, 130, 0.04);
+  background-repeat: no-repeat;
+}
+
+h2 {
+  color: darkblue;
+  margin-left: 50px;
+  font-size: 28px;
+}
+
+body {
+  background-position: right;
+  background-repeat: no-repeat;
+}
+.item-name {
+  font-weight: bold;
+  width: 200px;
+}
+
+.item-row {
+  display: flex;
+}
+
+.error-text {
+  color: #e38484;
+  font-size: 24px;
+}
+
+.flash_message {
+  display: flex;
+  border: 2px solid #d7e3e5;
+  border-radius: 15px;
+  padding: 15px;
+  width: 60%;
+  background-color: black;
+  color: #a97f00;
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+.flash_message > span {
+  width: 100%;
+  text-align: center;
+}
+
+.footer-line {
+  width: calc(100% - 20px);
+  margin: 30px 10px 10px 10px;
+  padding-top: 5px;
+  border-top: 1px solid lightgray;
+  display: flex;
+  justify-content: end;
+  font-size: 14px;
+}
+.user-identifier {
+  font-family: "Courier New", Courier, monospace;
+  font-style: italic;
+  padding-left: 5px;
+}
+
+.fixed_container {
+  /* position: relative; /******************************* What does this thing do??  From display_party.html
+  background-color: red;
+  top: 500px;
+  right: 80px; */
+}
