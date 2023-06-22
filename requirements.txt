@@ -1,0 +1,8 @@
+# pip install -r requirements.txt
+
+# Oldtimes Requirements
+Flask
+flask-login
+flask-restful
+
+namegenerator

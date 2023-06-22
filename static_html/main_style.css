@@ -65,3 +65,16 @@ body {
   top: 500px;
   right: 80px; */
 }
+
+.party-header {
+  color: #008000;
+  font-size: 20px;
+}
+.monster-header {
+  color: #800000;
+  font-size: 20px;
+}
+
+.creature-attribute {
+  margin-left: 20px;
+}

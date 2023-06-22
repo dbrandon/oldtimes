@@ -4,4 +4,23 @@
 
 <div>Scenario name is {{scenario.name}}</div>
 
+{% for member in scenario.party %}
+  <div class="party-header">Party Member: {{member.name}}, the {{member.cls}}</div>
+  <div class="creature-attribute">HP: {{member.health}}</div>
+  <div class="creature-attribute">Mana: {{member.mana}}</div>
+{% endfor %}
+
+{% for creature in scenario.monsters %}
+  <div class="monster-header">Monster: {{creature.name}}</div>
+  <div class="creature-attribute">HP: {{creature.health}}</div>
+  <div class="creature-attribute">Mana: {{creature.mana}}</div>
+{% endfor %}
+
+{% if scenario.is_finished %}
+<div>You have won!</div>
+<input type="button" value="Restart" onclick="location.href='/reset_scenario'"/>
+{% else %}
+<input type="button" value="Attack!" onclick="location.href='/attack'"/>
+{% endif %}
+
 {% endblock %}
