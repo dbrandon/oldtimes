@@ -40,6 +40,15 @@ def rest_hello():
 
   return jsonify({ 'username': user.name, 'scen_name' : sname})
 
+@OTApp.route('/rest/heroes')
+def rest_get_heroes():
+  return jsonify({ 'heroes': [
+    { 'id': 11, 'name': 'Nobody' },
+    { 'id': 12, 'name': 'Dr. Nice' },
+    { 'id': 13, 'name': 'Bombasto' },
+    { 'id': 14, 'name': 'Mr. Weber' },
+  ]})
+
 OTUserManager = UserManager()
 
 @OTLoginManager.user_loader
