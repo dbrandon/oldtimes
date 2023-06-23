@@ -1,7 +1,7 @@
 
 from flask import Flask, redirect, url_for, render_template, flash, request, jsonify
 from flask_login import LoginManager
-from flask_restful import Resource, Api
+#from flask_restful import Resource, Api
 
 import flask_login
 
@@ -11,6 +11,7 @@ from .ot_scenario import OTScenario
 
 import os
 import sys
+import json
 
 OTRoot = os.getcwd()
 
@@ -23,11 +24,11 @@ OTApp.secret_key = 'secret key'
 OTLoginManager = LoginManager()
 OTLoginManager.init_app(OTApp)
 
-OTApi = Api(OTApp)
+#OTApi = Api(OTApp)
 
-class Rsrc1(Resource):
-  def get(self):
-    return {'Hello': 'world'}
+# class Rsrc1(Resource):
+#   def get(self):
+#     return {'Hello': 'world'}
   
 #OTApi.add_resource(Rsrc1, '/rest/hello')
 @OTApp.route('/rest/hello')
@@ -40,14 +41,50 @@ def rest_hello():
 
   return jsonify({ 'username': user.name, 'scen_name' : sname})
 
-@OTApp.route('/rest/heroes')
-def rest_get_heroes():
-  return jsonify({ 'heroes': [
+
+heroes = [
     { 'id': 11, 'name': 'Nobody' },
     { 'id': 12, 'name': 'Dr. Nice' },
     { 'id': 13, 'name': 'Bombasto' },
     { 'id': 14, 'name': 'Mr. Weber' },
-  ]})
+]
+
+@OTApp.route('/rest/heroes')
+def rest_get_heroes():
+  return jsonify({ 'heroes': heroes })
+
+@OTApp.route('/rest/hero/<int:id>', methods=['GET'])
+def rest_get_hero(id:int):
+  for hero in heroes:
+    if hero['id'] == id:
+      return jsonify(hero)
+    
+@OTApp.route('/rest/hero', methods=['POST'])
+def rest_add_hero():
+  hname = request.data.decode()
+  id : int = 1
+  for hero in heroes:
+    hid = hero['id']
+    id = hid+1
+  heroes.append( { 'id': id, 'name': hname })
+  return jsonify({'ok': True})
+    
+@OTApp.route('/rest/hero', methods=['PUT'])
+def rest_update_hero():
+  hero = json.loads(request.data)
+  for i in range(len(heroes)):
+    if heroes[i]['id'] == hero['id']:
+      heroes[i] = hero
+      return jsonify({'ok': True})
+  return jsonify({'ok': False})
+
+@OTApp.route('/rest/hero/<int:id>', methods=['DELETE'])
+def rest_delete_hero(id: int):
+  for i in range(len(heroes)):
+    if heroes[i]['id'] == id:
+      heroes.remove(heroes[i])
+      return jsonify({'ok': True})
+  return jsonify({'ok': False})
 
 OTUserManager = UserManager()
 
