@@ -18,7 +18,6 @@ export class HeroDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private heroService: HeroService,
     private location: Location,
-    private http: HttpClient,
     private _router: Router,
   ) { }
 
@@ -36,16 +35,17 @@ export class HeroDetailComponent implements OnInit {
   }
 
   save(): void {
-    console.log('save');
-    this.http.put('/rest/hero', this.hero)
-      .subscribe(rr => {
-        console.log('rr=' + rr);
-      })
+    if(this.hero) {
+      this.heroService.updateHero(this.hero)
+        .subscribe(rr => this._router.navigateByUrl('/heroes'))
+    }
   }
 
   remove(): void {
     console.log('remove');
-    this.http.delete('/rest/hero/' + this.hero?.id)
-      .subscribe(rr => this._router.navigate(['heroes']));
+    if(this.hero) {
+      this.heroService.deleteHero(this.hero.id)
+        .subscribe(rr => this._router.navigate(['heroes']));
+    }
   }
 }

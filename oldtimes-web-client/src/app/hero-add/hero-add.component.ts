@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { HeroService } from '../hero.service';
 
 @Component({
   selector: 'app-hero-add',
@@ -14,7 +15,7 @@ export class HeroAddComponent implements OnInit {
   heroName = '';
 
   constructor(
-    private http: HttpClient,
+    private service: HeroService,
     private location: Location,
     private _router: Router) { }
 
@@ -26,11 +27,7 @@ export class HeroAddComponent implements OnInit {
   }
 
   save() {
-    console.log('save hero ' + this.heroName);
-    this.http.post('/rest/hero', this.heroName)
-        .subscribe(rr => {
-          console.log('response=' + rr);
-          this._router.navigate(['heroes'])
-        });
+    this.service.createHero(this.heroName)
+        .subscribe(rr => this._router.navigate(['heroes']));
   }
 }
