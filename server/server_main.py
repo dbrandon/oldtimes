@@ -134,6 +134,15 @@ def reset_scenario():
   user.set_scenario(None)
   return redirect(url_for('get_home_page'))
 
+@OTApp.route('/rest/get_authorized')
+def rest_get_authorized():
+  user = get_user()
+
+  if flask_login.current_user.is_authenticated != True:
+    user = OTUserManager.establish_user()
+    flask_login.login_user(user)
+  return jsonify({'username': user.name})
+
 @OTApp.route('/get_authorized')
 def get_authorized():
   print('Request authorization!')

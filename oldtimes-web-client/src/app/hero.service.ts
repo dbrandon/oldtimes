@@ -18,6 +18,10 @@ export class HeroService {
     private http: HttpClient,
     private messageService: MessageService) { }
 
+  getUsername() {
+    return this.http.get('/rest/get_authorized');
+  }
+
   getHeroes(): Observable<Hero[]> {
     return this.http.get<HResp>('/rest/heroes').pipe(
       map(resp => resp.heroes),
