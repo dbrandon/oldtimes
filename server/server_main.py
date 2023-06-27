@@ -50,6 +50,7 @@ heroes = [
 ]
 
 @OTApp.route('/rest/heroes')
+@flask_login.login_required
 def rest_get_heroes():
   return jsonify({ 'heroes': heroes })
 

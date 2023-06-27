@@ -28,18 +28,15 @@ export class HeroService {
 
   getUsername() {
     if(this.username != null) {
-      console.log('using the cached name!');
       return of(this.username);
     }
 
     if(this.usernameQuery == null) {
-      console.log('starting a new request!');
       this.usernameQuery = this.http.get<UsernameResp>('/rest/get_authorized').pipe(
         map(resp => resp.username)
       );
 
       this.usernameQuery.subscribe(resp => {
-        console.log('got mainline response: ' + resp);
         this.username = resp;
         this.usernameQuery = undefined;
 
@@ -50,12 +47,10 @@ export class HeroService {
     }
 
     return new Observable<string>((subscriber) => {
-      console.log('pushing the scriber onto the list);')
       if(this.username) {
         this.publishUsername(subscriber);
         return;
       }
-      console.log('go ahead and push it!');
       this.subList.push(subscriber);
     });
   }
@@ -74,17 +69,6 @@ export class HeroService {
       map(resp => resp.heroes),
       tap(list => this.log('received list (' + list.length + ') of heroes.'))
     ));
-    // return this.getUsername()
-    //     .pipe(
-    //       mergeMap(result => this.http.get<HResp>('/rest/heroes').pipe(
-    //         map(resp => resp.heroes),
-    //         tap(list => this.log('received list (' + list.length + ') of heroes'))
-    //       ))
-    //     )
-    // return this.http.get<HResp>('/rest/heroes').pipe(
-    //   map(resp => resp.heroes),
-    //   tap(list => this.log('recieved list (' + list.length + ') of heroes')),
-    // );
   }
 
   createHero(heroName: string) {
