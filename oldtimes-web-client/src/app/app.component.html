@@ -1,9 +1,12 @@
 
 <h1>{{title}}</h1>
-<nav>
-  <a routerLink="/dashboard">Dashboard</a>
-  <a routerLink="/heroes">Heroes</a>
-  <a routerLink="/add">Add</a>
-</nav>
+<div class="app-header">
+  <nav>
+    <a routerLink="/dashboard">Dashboard</a> |
+    <a routerLink="/heroes">Heroes</a> |
+    <a routerLink="/add">Add</a>
+  </nav>
+  <span>Thou shalt be known as <span class="username">{{username}}</span></span>
+</div>
 <router-outlet></router-outlet>
 <app-messages></app-messages>

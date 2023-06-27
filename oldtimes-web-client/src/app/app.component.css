@@ -262,6 +262,18 @@ svg#clouds {
   width: 1920px;
 }
 
+.app-header {
+  display: flex;
+}
+
+.app-header > span {
+  margin-left: 80px;
+}
+
+span.username {
+  font-style: italic;
+}
+
 /* Responsive Styles */
 @media screen and (max-width: 767px) {
   .card-container > *:not(.circle-link) ,
