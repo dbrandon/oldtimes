@@ -7,6 +7,7 @@ import flask_login
 
 from .ot_user_manager import UserManager
 from .ot_user import OTUser
+from .ot_party import Party, PartyMember
 from .ot_scenario import OTScenario
 
 import os
@@ -86,6 +87,24 @@ def rest_delete_hero(id: int):
       heroes.remove(heroes[i])
       return jsonify({'ok': True})
   return jsonify({'ok': False})
+
+
+@OTApp.route('/rest/party')
+@flask_login.login_required
+def rest_get_party():
+  user = get_user()
+  return jsonify({'party': user.party})
+
+@OTApp.route('/rest/party', methods=['POST'])
+@flask_login.login_required
+def rest_add_to_party():
+  user = get_user()
+  member: PartyMember = json.loads(request.data)
+  if user.party == None:
+    user.party = Party()
+  user.party.members.append(member)
+
+
 
 @OTApp.route('/rest/scenario/list')
 def rest_get_scenario_list():
