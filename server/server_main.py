@@ -87,6 +87,18 @@ def rest_delete_hero(id: int):
       return jsonify({'ok': True})
   return jsonify({'ok': False})
 
+@OTApp.route('/rest/scenario/list')
+def rest_get_scenario_list():
+  return jsonify({'list': ['First Scenario']})
+
+@OTApp.route('/rest/scenario/start', methods=['PUT'])
+@flask_login.login_required
+def rest_put_scenario_start():
+  user = get_user()
+  sname = request.data.decode
+  user.set_scenario(OTScenario(sname))
+  return jsonify({'ok': True, 'secnario': user.scenario})
+
 OTUserManager = UserManager()
 
 @OTLoginManager.user_loader

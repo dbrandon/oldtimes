@@ -10,6 +10,8 @@ import { MessagesComponent } from './messages/messages.component';
 import { AppRoutingModule } from './app-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HeroAddComponent } from './hero-add/hero-add.component';
+import { SelectScenarioComponent } from './select-scenario/select-scenario.component';
+import { PlayScenarioComponent } from './play-scenario/play-scenario.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { HeroAddComponent } from './hero-add/hero-add.component';
     HeroDetailComponent,
     MessagesComponent,
     DashboardComponent,
-    HeroAddComponent
+    HeroAddComponent,
+    SelectScenarioComponent,
+    PlayScenarioComponent
   ],
   imports: [
     BrowserModule,
