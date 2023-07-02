@@ -12,6 +12,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { HeroAddComponent } from './hero-add/hero-add.component';
 import { SelectScenarioComponent } from './select-scenario/select-scenario.component';
 import { PlayScenarioComponent } from './play-scenario/play-scenario.component';
+import { PartyInfoComponent } from './party-info/party-info.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { PlayScenarioComponent } from './play-scenario/play-scenario.component';
     DashboardComponent,
     HeroAddComponent,
     SelectScenarioComponent,
-    PlayScenarioComponent
+    PlayScenarioComponent,
+    PartyInfoComponent
   ],
   imports: [
     BrowserModule,

@@ -9,22 +9,27 @@ class PartyMember(Creature):
 
   def init_stats(self) -> None:
     if self._class == 'warrior':
-      self.strength = 20
-      self.intellect = 5
-      self.endurance = 14
+      self.stats.strength = 20
+      self.stats.intellect = 5
+      self.stats.endurance = 14
     elif self._class == 'cleric':
-      self.strength = 12
-      self.intellect = 14
-      self.endurance = 9
+      self.stats.strength = 12
+      self.stats.intellect = 14
+      self.stats.endurance = 9
     else:
       raise 'Unknown class: [' + self._class + ']'
     
-    self.health = self.endurance * 2
-    self.mana = self.intellect
+    self.stats.health = self.stats.endurance * 2
+    self.stats.mana = self.stats.intellect
 
   @property
   def cls(self) -> str:
     return self._class
+  
+  def toObj(self):
+    obj = super().toObj()
+    obj['cls'] = self.cls
+    return obj
 
 
 class Party:
@@ -35,3 +40,9 @@ class Party:
   @property
   def members(self) -> list[PartyMember]:
     return self._members
+  
+  def toObj(self):
+    jmembers = []
+    for m in self.members:
+      jmembers.append(m.toObj())
+    return { 'members': jmembers }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HeroService } from '../hero.service';
+import { Party } from '../obj/party_member';
 
 @Component({
   selector: 'app-select-scenario',
@@ -7,6 +8,7 @@ import { HeroService } from '../hero.service';
   styleUrls: ['./select-scenario.component.css']
 })
 export class SelectScenarioComponent implements OnInit {
+  public party: Party = new Party();
 
   constructor(private heroService : HeroService) { }
 
@@ -15,9 +17,7 @@ export class SelectScenarioComponent implements OnInit {
   }
 
   getParty() {
-    this.heroService.getParty().subscribe(party => {
-      console.log('do something with the party!');
-    })
+    this.heroService.getParty().subscribe(party => this.party = party);
   }
 
 }

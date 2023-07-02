@@ -59,6 +59,15 @@ class CreatureStats:
   def mana(self, mp:int):
     self._mana = mp
 
+  def toObj(self):
+    return {
+      'strength': self.strength,
+      'intellect' : self.intellect,
+      'endurance' : self.endurance,
+      'health': self.health,
+      'mana': self.mana,
+    }
+
 class Creature:
   def __init__(self, name:str) -> None:
     self._name = name
@@ -94,4 +103,10 @@ class Creature:
   @property
   def stats(self) -> CreatureStats:
     return self._stats
+  
+  def toObj(self):
+    return {
+      'name': self.name,
+      'stats': self.stats.toObj()
+    }
   

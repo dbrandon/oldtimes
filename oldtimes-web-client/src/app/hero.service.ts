@@ -14,6 +14,13 @@ interface UsernameResp {
   username: string;
 }
 
+interface SimpleResponse {
+  ok: boolean,
+}
+interface PartyResponse extends SimpleResponse {
+  party: Party,
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -66,8 +73,9 @@ export class HeroService {
   }
 
   getParty(): Observable<Party> {
-    return this.afterUsername(result => this.http.get<Party>('/rest/party').pipe(
-      tap(party => this.log('received party!'))
+    return this.afterUsername(result => this.http.get<PartyResponse>('/rest/party').pipe(
+      map(resp => resp.party),
+      tap(party => this.log('received party: ' + party.members.length + ' members'))
     ));
   }
 

@@ -26,13 +26,6 @@ OTApp.secret_key = 'secret key'
 OTLoginManager = LoginManager()
 OTLoginManager.init_app(OTApp)
 
-#OTApi = Api(OTApp)
-
-# class Rsrc1(Resource):
-#   def get(self):
-#     return {'Hello': 'world'}
-  
-#OTApi.add_resource(Rsrc1, '/rest/hello')
 @OTApp.route('/rest/hello')
 @flask_login.login_required
 def rest_hello():
@@ -99,7 +92,7 @@ def rest_get_party():
     party.members.append(PartyMember(random_creature_name(), 'warrior'))
     party.members.append(PartyMember(random_creature_name(), 'cleric'))
     user.party = party
-  return jsonify({'party': user.party})
+  return jsonify({'ok': True, 'party': user.party.toObj()})
 
 @OTApp.route('/rest/party', methods=['POST'])
 @flask_login.login_required
