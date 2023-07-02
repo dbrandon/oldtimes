@@ -4,6 +4,7 @@ import { Hero } from './hero';
 import { Observable, map, of, tap, share, Subject, Subscriber, mergeMap } from 'rxjs';
 import { MessageService } from './message.service';
 import { HttpClient } from '@angular/common/http';
+import { Party } from './obj/party_member';
 
 interface HResp {
   heroes: Hero[];
@@ -62,6 +63,12 @@ export class HeroService {
 
   private afterUsername<RC>(fn: (name:string)=>Observable<RC>): Observable<RC> {
     return this.getUsername().pipe(mergeMap(fn));
+  }
+
+  getParty(): Observable<Party> {
+    return this.afterUsername(result => this.http.get<Party>('/rest/party').pipe(
+      tap(party => this.log('received party!'))
+    ));
   }
 
   getHeroes(): Observable<Hero[]> {

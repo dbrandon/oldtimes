@@ -7,6 +7,7 @@ import flask_login
 
 from .ot_user_manager import UserManager
 from .ot_user import OTUser
+from .ot_creature import random_creature_name
 from .ot_party import Party, PartyMember
 from .ot_scenario import OTScenario
 
@@ -93,6 +94,11 @@ def rest_delete_hero(id: int):
 @flask_login.login_required
 def rest_get_party():
   user = get_user()
+  if user.party == None:
+    party = Party()
+    party.members.append(PartyMember(random_creature_name(), 'warrior'))
+    party.members.append(PartyMember(random_creature_name(), 'cleric'))
+    user.party = party
   return jsonify({'party': user.party})
 
 @OTApp.route('/rest/party', methods=['POST'])

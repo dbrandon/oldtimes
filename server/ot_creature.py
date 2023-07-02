@@ -15,15 +15,55 @@ def random_creature_name() -> str:
   last_name = random.choice(namegenerator.RIGHT).capitalize()
   return first_name + ' ' + last_name
 
+class CreatureStats:
+  def __init__(self) -> None:
+    self._strength = 0
+    self._intellect = 0
+    self._endurance = 0
+
+    self._health = 5
+    self._mana = 0
+
+  @property
+  def strength(self) -> int:
+    return self._strength
+  @strength.setter
+  def strength(self, strength:int):
+    self._strength = strength
+  
+  @property
+  def intellect(self) -> int:
+    return self._intellect
+  @intellect.setter
+  def intellect(self, intellect:int):
+    self._intellect = intellect
+
+  @property
+  def endurance(self) -> int:
+    return self._endurance
+  @endurance.setter
+  def endurance(self, endurance:int):
+    self._endurance = endurance
+
+  @property
+  def health(self) -> int:
+    return self._health
+  @health.setter
+  def health(self, hp:int):
+    self._health = hp
+  
+  @property
+  def mana(self) -> int:
+    return self._mana
+  @mana.setter
+  def mana(self, mp:int):
+    self._mana = mp
+
 class Creature:
   def __init__(self, name:str) -> None:
     self._name = name
-    self._stats = dict[str,int]()
-    self._var = dict[str,int]()
+    self._stats = CreatureStats()
     self._inventory = list[Item]()
-
-    self.health = 5
-    self.mana = 0
 
   def attack(self, other : 'Creature') -> None:
     hit = random.random() > 0.4
@@ -34,38 +74,16 @@ class Creature:
     if damage < 1:
       return self.name + ' hits ' + other.name + ' with a glancing blow'
     
-    health = other.health - damage
+    health = other.stats.health - damage
     if health < 0:
       health = 0
-    other.health = health
+    other.stats.health = health
 
     if health < 1:
       return self.name + ' hits ' + other.name + ' for ' + str(damage) + ' points of damage, killing ' + other.name
     return self.name + ' hits ' + other.name + ' for ' + str(damage) + ' points'
   
-  @property
-  def strength(self) -> int:
-    return self._stats['str']
   
-  @strength.setter
-  def strength(self, strength:int):
-    self._stats['str'] = strength
-  
-  @property
-  def intellect(self) -> int:
-    return self._stats['int']
-  @intellect.setter
-  def intellect(self, intellect:int):
-    self._stats['int'] = intellect
-
-  @property
-  def endurance(self) -> int:
-    return self._stats['end']
-  @endurance.setter
-  def endurance(self, endurance:int):
-    self._stats['end'] = endurance
-  
-  @property
   def is_alive(self) -> bool:
     return self.health > 0
   
@@ -74,17 +92,6 @@ class Creature:
     return self._name
   
   @property
-  def health(self) -> int:
-    return self._var['hp']
+  def stats(self) -> CreatureStats:
+    return self._stats
   
-  @health.setter
-  def health(self, hp:int):
-    self._var['hp'] = hp
-  
-  @property
-  def mana(self) -> int:
-    return self._var['mp']
-  
-  @mana.setter
-  def mana(self, mp:int):
-    self._var['mp'] = mp
