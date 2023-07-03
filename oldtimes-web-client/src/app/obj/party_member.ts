@@ -5,8 +5,9 @@ export class PartyMember extends Creature {
 
   constructor(name: string,
     stats: CreatureStats,
+    uuid: string,
     private _cls: string) {
-    super(name, stats);
+    super(name, stats, uuid);
   }
 
   public get cls() {

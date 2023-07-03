@@ -1,0 +1,8 @@
+
+.scenario-play-main {
+  display: flex;
+}
+
+.scenario-play-area {
+  flex: 1;
+}

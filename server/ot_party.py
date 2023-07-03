@@ -3,7 +3,7 @@ from .ot_creature import Creature
 
 class PartyMember(Creature):
   def __init__(self, name: str, cls:str) -> None:
-    super().__init__(name)
+    super().__init__(name, None)
     self._class = cls
     self.init_stats()
 

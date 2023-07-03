@@ -1,6 +1,9 @@
 import random
 import namegenerator
 
+import base64
+from uuid import UUID, uuid4
+
 
 class Item:
   def __init__(self, name:str) -> None:
@@ -69,8 +72,12 @@ class CreatureStats:
     }
 
 class Creature:
-  def __init__(self, name:str) -> None:
+  def __init__(self, name:str, creature_uuid:UUID) -> None:
     self._name = name
+    self._uuid = creature_uuid
+    if creature_uuid is None:
+      self._uuid = uuid4()
+
     self._stats = CreatureStats()
     self._inventory = list[Item]()
 
@@ -104,9 +111,15 @@ class Creature:
   def stats(self) -> CreatureStats:
     return self._stats
   
+  @property
+  def uuid(self):
+    return self._uuid
+  
   def toObj(self):
     return {
       'name': self.name,
+      'uuid': str(self._uuid.hex),
+#      'uuid': str(base64.b64encode(self._uuid.bytes)),
       'stats': self.stats.toObj()
     }
   

@@ -43,7 +43,9 @@ export class CreatureStats {
 }
 
 export class Creature {
-  constructor(private _name: string, private _stats: CreatureStats) {}
+  constructor(private _name: string,
+    private _stats: CreatureStats,
+    private _uuid: string) {}
 
   public get name() {
     return this._name;
@@ -51,5 +53,9 @@ export class Creature {
 
   public get stats() {
     return this._stats;
+  }
+
+  public get uuid() {
+    return this._uuid;
   }
 }

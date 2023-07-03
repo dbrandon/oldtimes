@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HeroService } from '../hero.service';
 import { Party } from '../obj/party_member';
+import { Scenario } from '../obj/scenario';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-select-scenario',
@@ -10,14 +12,27 @@ import { Party } from '../obj/party_member';
 export class SelectScenarioComponent implements OnInit {
   public party: Party = new Party();
 
-  constructor(private heroService : HeroService) { }
+  public scenarioList: Scenario[] = [];
+
+  constructor(private heroService : HeroService,
+    private _router: Router) { }
 
   ngOnInit(): void {
-    this.getParty()
+    this.getParty();
+    this.getScenarioList();
   }
 
   getParty() {
     this.heroService.getParty().subscribe(party => this.party = party);
   }
 
+  getScenarioList() {
+    this.heroService.getScenarioList().subscribe(list => this.scenarioList = list);
+  }
+
+  startScenario(scenario: Scenario) {
+    this.heroService.startScenario(scenario).subscribe(r => {
+      this._router.navigateByUrl('/play-scenario');
+    })
+  }
 }

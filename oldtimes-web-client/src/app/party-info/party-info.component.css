@@ -1,0 +1,19 @@
+
+.character-name {
+  font-size: 16px;
+}
+
+.character-stats-container {
+  margin-left: 10px;
+  display: grid;
+}
+
+.character-stat-label {
+  font-weight: bold;
+  grid-column: 1;
+}
+
+.character-stat-value {
+  color: blue;
+  grid-column: 2;
+}

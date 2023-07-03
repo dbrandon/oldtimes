@@ -1,3 +1,15 @@
-<h2>Party</h2>
 
-<app-party-info [party]="party"></app-party-info>
+<div class="scenario-select-main">
+  <span class="scenario-select-container">
+    <div>Scenario selection</div>
+
+    <div *ngFor="let scenario of scenarioList">
+      <span (click)="startScenario(scenario)">Scenario: {{scenario.name}}</span>
+    </div>
+  </span>
+
+  <span>
+    <h2>Party</h2>
+    <app-party-info [party]="party"></app-party-info>
+  </span>
+</div>

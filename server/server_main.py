@@ -107,15 +107,25 @@ def rest_add_to_party():
 
 @OTApp.route('/rest/scenario/list')
 def rest_get_scenario_list():
-  return jsonify({'list': ['First Scenario']})
+  return jsonify({'ok': True, 'scenarioList': [{
+    'name': 'First Scenario', 'id': 'XXX'}
+  ]})
 
 @OTApp.route('/rest/scenario/start', methods=['PUT'])
 @flask_login.login_required
 def rest_put_scenario_start():
   user = get_user()
-  sname = request.data.decode
-  user.set_scenario(OTScenario(sname))
-  return jsonify({'ok': True, 'secnario': user.scenario})
+  scenario = json.loads(request.data)
+  print('scenario name=[' + scenario['name'] + ']')
+  user.set_scenario(OTScenario(scenario['name'], user.party))
+  return jsonify({'ok': True})
+
+@OTApp.route('/rest/scenario.monsters')
+@flask_login.login_required
+def rest_get_secnario_monsters():
+  user = get_user()
+  return jsonify({'ok': True, 'monsterList': user.scenario.getMonstersObj()})
+
 
 OTUserManager = UserManager()
 

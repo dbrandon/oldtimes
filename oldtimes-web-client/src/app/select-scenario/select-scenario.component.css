@@ -1,0 +1,15 @@
+.scenario-select-main {
+  display: flex;
+  border: 1px solid black;
+}
+
+.scenario-select-container {
+  flex: 1;
+  width: 100%;
+}
+
+.scenario-select-main span {
+  margin: 5px;
+  border: 1px solid black;
+  padding: 5px;
+}

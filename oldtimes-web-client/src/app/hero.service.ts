@@ -5,6 +5,8 @@ import { Observable, map, of, tap, share, Subject, Subscriber, mergeMap } from '
 import { MessageService } from './message.service';
 import { HttpClient } from '@angular/common/http';
 import { Party } from './obj/party_member';
+import { Scenario } from './obj/scenario';
+import { Monster } from './obj/monster';
 
 interface HResp {
   heroes: Hero[];
@@ -17,8 +19,16 @@ interface UsernameResp {
 interface SimpleResponse {
   ok: boolean,
 }
+
+interface MonsterResponse extends SimpleResponse {
+  monsterList: Monster[];
+}
 interface PartyResponse extends SimpleResponse {
   party: Party,
+}
+
+interface ScenarioResponse extends SimpleResponse {
+  scenarioList: Scenario[];
 }
 
 @Injectable({
@@ -72,11 +82,33 @@ export class HeroService {
     return this.getUsername().pipe(mergeMap(fn));
   }
 
+  getMonsters(): Observable<Monster[]> {
+    return this.afterUsername(result => this.http.get<MonsterResponse>('/rest/scenario.monsters').pipe(
+      tap(raw => console.log('RAW: ' + JSON.stringify(raw))),
+      map(resp => resp.monsterList),
+      tap(list => this.log('received monsters: ' + list.length))
+    ))
+  }
+
   getParty(): Observable<Party> {
     return this.afterUsername(result => this.http.get<PartyResponse>('/rest/party').pipe(
       map(resp => resp.party),
       tap(party => this.log('received party: ' + party.members.length + ' members'))
     ));
+  }
+
+  getScenarioList(): Observable<Scenario[]> {
+    console.log('request scenarios');
+    return this.afterUsername(result => this.http.get<ScenarioResponse>('/rest/scenario/list').pipe(
+      map(resp => resp.scenarioList),
+      tap(list => this.log('received scenario list: ' + list.length + ' options'))
+    ))
+  }
+
+  startScenario(scenario: Scenario): Observable<SimpleResponse> {
+    return this.afterUsername(result => this.http.put<SimpleResponse>('/rest/scenario/start', scenario).pipe(
+      tap(resp => this.log('started scenario ' + scenario.name))
+    ))
   }
 
   getHeroes(): Observable<Hero[]> {

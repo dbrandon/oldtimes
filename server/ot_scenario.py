@@ -6,15 +6,20 @@ from .ot_party import Party, PartyMember
 
 class Monster(Creature):
   def __init__(self, name: str, kind:int) -> None:
-    super().__init__(name)
+    super().__init__(name, None)
     self._kind = kind
     self.init_stats()
 
   def init_stats(self):
-    self.strength = 18
-    self.intellect = 2
-    self.endurance = 8
-    self.health = 15
+    self.stats.strength = 18
+    self.stats.intellect = 2
+    self.stats.endurance = 8
+    self.stats.health = 15
+
+  def toObj(self):
+    obj = super().toObj()
+    obj['kind'] = 'Big Meanie'
+    return obj
     
 
 class OTScenario:
@@ -67,3 +72,9 @@ class OTScenario:
   @property
   def monsters(self) -> list[Monster]:
     return self._monsters
+  
+  def getMonstersObj(self):
+    monsters = []
+    for m in self.monsters:
+      monsters.append(m.toObj())
+    return monsters
