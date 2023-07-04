@@ -1,0 +1,11 @@
+
+<div *ngIf="stats" class="creature-stats-container">
+  <label class="creature-stat-label">Strength:</label>
+  <span class="creature-stat-value">{{stats.strength}}</span>
+  <label class="creature-stat-label">Endurance:</label>
+  <span class="creature-stat-value">{{stats.endurance}}</span>
+  <label class="creature-stat-label">Health:</label>
+  <span [class.creature-stat-dead]="stats.health == 0" class="creature-stat-value">{{stats.health}}</span>
+  <label class="creature-stat-label">Mana:</label>
+  <span class="creature-stat-value">{{stats.mana}}</span>
+</div>

@@ -1,0 +1,10 @@
+
+.monster-name {
+  font-size: 16px;
+}
+
+.monster-dead {
+  text-decoration: line-through;
+  font-style: italic;
+  color: red;
+}

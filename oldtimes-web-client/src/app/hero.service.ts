@@ -31,6 +31,10 @@ interface ScenarioResponse extends SimpleResponse {
   scenarioList: Scenario[];
 }
 
+interface SimpleAttackResponse extends SimpleResponse {
+  messageList: string[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -84,7 +88,6 @@ export class HeroService {
 
   getMonsters(): Observable<Monster[]> {
     return this.afterUsername(result => this.http.get<MonsterResponse>('/rest/scenario.monsters').pipe(
-      tap(raw => console.log('RAW: ' + JSON.stringify(raw))),
       map(resp => resp.monsterList),
       tap(list => this.log('received monsters: ' + list.length))
     ))
@@ -109,6 +112,12 @@ export class HeroService {
     return this.afterUsername(result => this.http.put<SimpleResponse>('/rest/scenario/start', scenario).pipe(
       tap(resp => this.log('started scenario ' + scenario.name))
     ))
+  }
+
+  simpleAttack(): Observable<string[]> {
+    return this.afterUsername(result => this.http.get<SimpleAttackResponse>('/rest/scenario/attack').pipe(
+      map(resp => resp.messageList)
+    ));
   }
 
   getHeroes(): Observable<Hero[]> {

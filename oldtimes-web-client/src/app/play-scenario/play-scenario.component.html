@@ -2,9 +2,20 @@
 <div class="scenario-play-main">
   <span class="scenario-play-area">
     <p>play-scenario works!</p>
+    <button (click)="attack()">Attack!</button>
+    <h3>Combat Log</h3>
+    <div>
+      <div *ngFor="let msg of messageList">{{msg}}</div>
+    </div>
   </span>
 
   <span>
+    <h2>Monsters</h2>
+    <app-monster-detail [monster]="monster" *ngFor="let monster of monsterList"></app-monster-detail>
+  </span>
+
+  <span>
+    <h2>Party</h2>
     <app-party-info [party]="party"></app-party-info>
   </span>
 </div>

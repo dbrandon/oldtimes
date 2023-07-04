@@ -1,0 +1,5 @@
+
+<div *ngIf="monster">
+  <div [class.monster-dead]="monster.stats.health === 0" class="monster-name">{{monster.name}}</div>
+  <app-creature-stat-detail [stats]="monster.stats"></app-creature-stat-detail>
+</div>

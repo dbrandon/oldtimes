@@ -126,6 +126,11 @@ def rest_get_secnario_monsters():
   user = get_user()
   return jsonify({'ok': True, 'monsterList': user.scenario.getMonstersObj()})
 
+@OTApp.route('/rest/scenario/attack')
+@flask_login.login_required
+def rest_scenario_attack():
+  user = get_user()
+  return jsonify({'ok': True, 'messageList': user.scenario.attack()})
 
 OTUserManager = UserManager()
 

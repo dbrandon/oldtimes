@@ -1,0 +1,5 @@
+
+<div *ngIf="member">
+  <div class="member-name">{{member.name}}, the {{member.cls}}</div>
+  <app-creature-stat-detail [stats]="member.stats"></app-creature-stat-detail>
+</div>

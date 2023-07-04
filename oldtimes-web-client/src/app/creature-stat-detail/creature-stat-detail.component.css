@@ -1,0 +1,20 @@
+.creature-stats-container {
+  margin-left: 10px;
+  display: grid;
+}
+
+.creature-stat-label {
+  font-weight: bold;
+  grid-column: 1;
+}
+
+.creature-stat-value {
+  color: blue;
+  grid-column: 2;
+  text-align: right;
+}
+
+.creature-stat-dead {
+  font-style: italic;
+  color: red;
+}

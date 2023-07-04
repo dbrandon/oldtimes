@@ -1,15 +1,7 @@
 
 <div *ngIf="party">
   <div *ngFor="let member of party.members">
-    <div class="character-name">{{member.name}}, the {{member.cls}}</div>
-    <!-- <div>UUID: {{member.uuid}}</div> -->
-    <div class="character-stats-container">
-        <label class="character-stat-label">Strength:</label>
-        <span class="character-stat-value">{{member.stats.strength}}</span>
-        <label class="character-stat-label">Endurance:</label> <span class="character-stat-value">{{member.stats.endurance}}</span>
-        <label class="character-stat-label">Health:</label> <span class="character-stat-value">{{member.stats.health}}</span>
-        <label class="character-stat-label">Mana:</label> <span class="character-stat-value">{{member.stats.mana}}</span>
-    </div>
+    <app-party-member-detail [member]="member"></app-party-member-detail>
   </div>
 </div>
 

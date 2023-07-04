@@ -13,6 +13,9 @@ import { HeroAddComponent } from './hero-add/hero-add.component';
 import { SelectScenarioComponent } from './select-scenario/select-scenario.component';
 import { PlayScenarioComponent } from './play-scenario/play-scenario.component';
 import { PartyInfoComponent } from './party-info/party-info.component';
+import { CreatureStatDetailComponent } from './creature-stat-detail/creature-stat-detail.component';
+import { PartyMemberDetailComponent } from './party-member-detail/party-member-detail.component';
+import { MonsterDetailComponent } from './monster-detail/monster-detail.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,10 @@ import { PartyInfoComponent } from './party-info/party-info.component';
     HeroAddComponent,
     SelectScenarioComponent,
     PlayScenarioComponent,
-    PartyInfoComponent
+    PartyInfoComponent,
+    CreatureStatDetailComponent,
+    PartyMemberDetailComponent,
+    MonsterDetailComponent
   ],
   imports: [
     BrowserModule,

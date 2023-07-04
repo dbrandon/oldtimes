@@ -2,6 +2,7 @@
 from .ot_creature import Creature, random_creature_name
 from .ot_party import Party, PartyMember
 
+import sys
       
 
 class Monster(Creature):
@@ -43,10 +44,16 @@ class OTScenario:
     party.members.append(PartyMember(random_creature_name(), 'warrior'))
     party.members.append(PartyMember(random_creature_name(), 'cleric'))
     return party
-
+  
   def attack(self) -> list[str]:
     result = list[str]()
 
+    print('Attack ' + self.monsters[0].name);
+    sys.stdout.flush()
+
+    print('monster ' + self.monsters[0].name + ' isalive=' + str(self.monsters[0].is_alive))
+    sys.stdout.flush()
+    
     if not self.monsters[0].is_alive:
       result.append('There are no monsters left to kill!')
       return result

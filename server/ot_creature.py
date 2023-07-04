@@ -1,7 +1,7 @@
 import random
 import namegenerator
 
-import base64
+import sys
 from uuid import UUID, uuid4
 
 
@@ -99,9 +99,12 @@ class Creature:
       return self.name + ' hits ' + other.name + ' for ' + str(damage) + ' points of damage, killing ' + other.name
     return self.name + ' hits ' + other.name + ' for ' + str(damage) + ' points'
   
-  
+  @property
   def is_alive(self) -> bool:
-    return self.health > 0
+    print('health for ' + self.name + ' is ' + str(self.stats.health))
+    sys.stdout.flush()
+
+    return self.stats.health > 0
   
   @property
   def name(self) -> str:

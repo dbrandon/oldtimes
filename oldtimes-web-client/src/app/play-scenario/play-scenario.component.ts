@@ -11,6 +11,7 @@ import { Monster } from '../obj/monster';
 export class PlayScenarioComponent implements OnInit {
   public monsterList: Monster[] = [];
   public party: Party = new Party();
+  public messageList: string[] = [];
 
   constructor(private heroService: HeroService) { }
 
@@ -25,5 +26,14 @@ export class PlayScenarioComponent implements OnInit {
 
   getParty() {
     this.heroService.getParty().subscribe(party => this.party = party);
+  }
+
+  attack() {
+    this.heroService.simpleAttack().subscribe(list => {
+      for(var i = 0; i < list.length; i++) {
+        this.messageList.push(list[i]);
+      }
+      this.getMonsters();
+    })
   }
 }
