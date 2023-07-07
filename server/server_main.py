@@ -9,13 +9,16 @@ from .ot_user_manager import UserManager
 from .ot_user import OTUser
 from .ot_creature import random_creature_name
 from .ot_party import Party, PartyMember
-from .ot_scenario import OTScenario
+from .ot_scenario import OTScenarioPlayer, OTScenarioManager
 
 import os
 import sys
 import json
 
 OTRoot = os.getcwd()
+
+print('Loading scenarios...')
+scenario_manager = OTScenarioManager()
 
 print('Initializing Old Times server...')
 Old_Times_Version = 1
@@ -107,30 +110,30 @@ def rest_add_to_party():
 
 @OTApp.route('/rest/scenario/list')
 def rest_get_scenario_list():
-  return jsonify({'ok': True, 'scenarioList': [{
-    'name': 'First Scenario', 'id': 'XXX'}
-  ]})
+  return jsonify({'ok': True, 'scenarioList': scenario_manager.scenario_list})
 
 @OTApp.route('/rest/scenario/start', methods=['PUT'])
 @flask_login.login_required
 def rest_put_scenario_start():
   user = get_user()
-  scenario = json.loads(request.data)
-  print('scenario name=[' + scenario['name'] + ']')
-  user.set_scenario(OTScenario(scenario['name'], user.party))
+  req = json.loads(request.data)
+  print('scenario name=[' + req['name'] + ']')
+  scenario = scenario_manager.get_scenario_by_name(req['name'])
+
+  user.scenario_player = OTScenarioPlayer(scenario, user.party)
   return jsonify({'ok': True})
 
 @OTApp.route('/rest/scenario.monsters')
 @flask_login.login_required
 def rest_get_secnario_monsters():
   user = get_user()
-  return jsonify({'ok': True, 'monsterList': user.scenario.getMonstersObj()})
+  return jsonify({'ok': True, 'monsterList': user.scenario_player.scenario.getMonstersObj()})
 
 @OTApp.route('/rest/scenario/attack')
 @flask_login.login_required
 def rest_scenario_attack():
   user = get_user()
-  return jsonify({'ok': True, 'messageList': user.scenario.attack()})
+  return jsonify({'ok': True, 'messageList': user.scenario_player.attack()})
 
 OTUserManager = UserManager()
 

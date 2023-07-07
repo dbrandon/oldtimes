@@ -1,7 +1,7 @@
 
 from flask_login import UserMixin
 from .ot_party import Party
-from .ot_scenario import OTScenario
+from .ot_scenario import OTScenarioPlayer
 
 class OTUser(UserMixin):
   def __init__(self, id, name) -> None:
@@ -9,7 +9,7 @@ class OTUser(UserMixin):
     self._name = name
     self.password = self._name + "_secret"
     self._party = None
-    self._scenario = None
+    self._scenario_player = None
 
     UserMixin.is_active = True
 
@@ -28,11 +28,9 @@ class OTUser(UserMixin):
     self._party = party
   
   @property
-  def scenario(self) -> OTScenario:
-    return self._scenario
+  def scenario_player(self) -> OTScenarioPlayer:
+    return self._scenario_player
   
-  def get_scenario(self) -> OTScenario:
-    return self._scenario
-  
-  def set_scenario(self, scenario:OTScenario) -> None:
-    self._scenario = scenario
+  @scenario_player.setter
+  def scenario_player(self, scenario_player:OTScenarioPlayer) -> None:
+    self._scenario_player = scenario_player

@@ -1,65 +1,87 @@
 
 from .ot_creature import Creature, random_creature_name
+from .ot_monster import Monster
 from .ot_party import Party, PartyMember
+from .ot_util import OTUtil
 
-import sys
-      
-
-class Monster(Creature):
-  def __init__(self, name: str, kind:int) -> None:
-    super().__init__(name, None)
-    self._kind = kind
-    self.init_stats()
-
-  def init_stats(self):
-    self.stats.strength = 18
-    self.stats.intellect = 2
-    self.stats.endurance = 8
-    self.stats.health = 15
-
-  def toObj(self):
-    obj = super().toObj()
-    obj['kind'] = 'Big Meanie'
-    return obj
-    
+import uuid
 
 class OTScenario:
-  def __init__(self, name:str, party:Party) -> None:
-    self._name = name
-    self._party = party
-
-    if self._party == None:
-      self._party = OTScenario.create_party()
-
+  def __init__(self, id:uuid.UUID, raw:dict) -> None:
+    self._uuid = id
+    if raw != None:
+      self._name = OTUtil.get_str(raw, 'name')
     self._monsters = list[Monster]()
     self._monsters.append(Monster(random_creature_name(), 1))
 
+  @property
+  def id(self) -> uuid.UUID:
+    return self._uuid
+
+  @property
+  def name(self) -> str:
+    return self._name
+  
+  @property
+  def monsters(self) -> list[Monster]:
+    return self._monsters
+  
+  def get_brief(self):
+    return {
+      'name': self.name,
+      'id': self.id
+    }
+
+  def getMonstersObj(self):
+    monsters = []
+    for m in self.monsters:
+      monsters.append(m.toObj())
+    return monsters
+
+
+class OTScenarioManager:
+  def __init__(self) -> None:
+    self._scenario_list = list[OTScenario]()
+
+    print('Load scenarios...')
+    for entry in OTUtil.get_scenario_files():
+      scen = OTScenario(OTUtil.get_name_as_uuid(entry), OTUtil.load_yaml(entry))
+      print('   -> Loaded ' + str(scen.id) + ' with name =[' + scen.name + ']')
+      self._scenario_list.append(scen)
+
+  def get_scenario_by_name(self, name:str):
+    for s in self._scenario_list:
+      if s.name == name:
+        return s
+    return None
+
+
+  @property
+  def scenario_list(self):
+    brief_list = list()
+    for s in self._scenario_list:
+      brief_list.append(s.get_brief())
+    return brief_list
+      
+
+class OTScenarioPlayer:
+  def __init__(self, scenario: OTScenario, party:Party) -> None:
+    self._scenario = scenario
+    self._party = party
     self._finished = False
 
     pass
 
-  def create_party() -> Party:
-    party = Party()
-
-    party.members.append(PartyMember(random_creature_name(), 'warrior'))
-    party.members.append(PartyMember(random_creature_name(), 'cleric'))
-    return party
-  
   def attack(self) -> list[str]:
     result = list[str]()
 
-    print('Attack ' + self.monsters[0].name);
-    sys.stdout.flush()
-
-    print('monster ' + self.monsters[0].name + ' isalive=' + str(self.monsters[0].is_alive))
-    sys.stdout.flush()
-    
-    if not self.monsters[0].is_alive:
-      result.append('There are no monsters left to kill!')
+    if self.is_finished:
+      result.append('The scenario is complete.')
       return result
     
-    result.append(self.party[0].attack(self.monsters[0]))
-    if not self.monsters[0].is_alive:
+    monster = self.scenario.monsters[0]
+    result.append(self.party[0].attack(monster))
+    if not monster.is_alive:
       result.append('All opponents have been vanquished!')
       self._finished = True
     return result
@@ -75,13 +97,8 @@ class OTScenario:
   @property
   def party(self) -> list[PartyMember]:
     return self._party.members
-  
+
   @property
-  def monsters(self) -> list[Monster]:
-    return self._monsters
+  def scenario(self) -> OTScenario:
+    return self._scenario
   
-  def getMonstersObj(self):
-    monsters = []
-    for m in self.monsters:
-      monsters.append(m.toObj())
-    return monsters
