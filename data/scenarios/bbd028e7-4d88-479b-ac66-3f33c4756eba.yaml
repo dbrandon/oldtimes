@@ -1,1 +1,17 @@
 name: Scenario the First
+room-info:
+  default: Room 1
+  stages:
+    - name: Room 1
+      on-enter:
+        say: "You have entered the old storage room"
+
+monsters:
+  - name: Tickle Monster
+    kind: tickle freak
+    stats:
+      strength: 44
+      intellect: 2
+      endurance: 12
+      health: 16
+      mana: 0

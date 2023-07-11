@@ -30,6 +30,14 @@ class OTUtil:
     if v == None and empty_list_if_none:
       v = []
     return v
+  
+  def get_dict(d: dict, field_name: str, empty_dict_if_none: bool = True) -> dict:
+    v = d.get(field_name)
+    if v != None and not isinstance(v, dict):
+      raise LookupError('Field \'' + field_name + '\' is not a dict')
+    if v == None and empty_dict_if_none:
+      v = dict()
+    return v
 
   def get_type_id(x) -> str:
     if x == None:

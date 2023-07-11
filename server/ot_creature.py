@@ -1,8 +1,11 @@
+import copy
 import random
 import namegenerator
 
 import sys
 from uuid import UUID, uuid4
+
+from .ot_util import OTUtil
 
 
 class Item:
@@ -19,13 +22,21 @@ def random_creature_name() -> str:
   return first_name + ' ' + last_name
 
 class CreatureStats:
-  def __init__(self) -> None:
+  def __init__(self, raw:dict = None) -> None:
     self._strength = 0
     self._intellect = 0
     self._endurance = 0
 
     self._health = 5
     self._mana = 0
+
+    if raw != None:
+      self._strength = OTUtil.get_int(raw, 'strength')
+      self._intellect = OTUtil.get_int(raw, 'intellect')
+      self._endurance = OTUtil.get_int(raw, 'endurance')
+      self._health = OTUtil.get_int(raw, 'health')
+      self._mana = OTUtil.get_int(raw, 'mana')
+
 
   @property
   def strength(self) -> int:
@@ -72,14 +83,22 @@ class CreatureStats:
     }
 
 class Creature:
-  def __init__(self, name:str, creature_uuid:UUID) -> None:
+  def __init__(self, name:str, creature_uuid:UUID, stats:CreatureStats = None) -> None:
     self._name = name
     self._uuid = creature_uuid
     if creature_uuid is None:
       self._uuid = uuid4()
 
-    self._stats = CreatureStats()
+    self._stats = stats
+    if self._stats == None:
+      self._stats = CreatureStats()
     self._inventory = list[Item]()
+
+  def __deepcopy__(self, memo) -> 'Creature':
+    return Creature(
+      copy.deepcopy(self.name, memo),
+      uuid4(),
+      copy.deepcopy(self._stats))
 
   def attack(self, other : 'Creature') -> None:
     hit = random.random() > 0.4
@@ -101,9 +120,6 @@ class Creature:
   
   @property
   def is_alive(self) -> bool:
-    print('health for ' + self.name + ' is ' + str(self.stats.health))
-    sys.stdout.flush()
-
     return self.stats.health > 0
   
   @property

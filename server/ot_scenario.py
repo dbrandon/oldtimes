@@ -4,6 +4,7 @@ from .ot_monster import Monster
 from .ot_party import Party, PartyMember
 from .ot_util import OTUtil
 
+import copy
 import uuid
 
 class OTScenario:
@@ -12,7 +13,12 @@ class OTScenario:
     if raw != None:
       self._name = OTUtil.get_str(raw, 'name')
     self._monsters = list[Monster]()
-    self._monsters.append(Monster(random_creature_name(), 1))
+    raw_monsters = OTUtil.get_list(raw, 'monsters')
+    for raw_monster in raw_monsters:
+      self._monsters.append(Monster.fromRaw(raw_monster))
+
+  def clone(self) -> 'OTScenario':
+    return copy.deepcopy(self)
 
   @property
   def id(self) -> uuid.UUID:

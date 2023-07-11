@@ -1,11 +1,20 @@
 
-from .ot_creature import Creature
+from .ot_creature import Creature, CreatureStats
+from .ot_util import OTUtil
 
 class Monster(Creature):
-  def __init__(self, name: str, kind:int) -> None:
-    super().__init__(name, None)
+  def __init__(self, name: str, kind:int, stats:CreatureStats = None) -> None:
+    super().__init__(name, None, stats)
     self._kind = kind
-    self.init_stats()
+    if stats == None:
+      self.init_stats()
+
+  def fromRaw(raw:dict) -> 'Monster':
+    name = OTUtil.get_str(raw, 'name')
+    kind = OTUtil.get_str(raw, 'kind')
+    raw_stats = OTUtil.get_dict(raw, 'stats')
+    stats = CreatureStats(raw_stats)
+    return Monster(name, kind, stats)
 
   def init_stats(self):
     self.stats.strength = 18

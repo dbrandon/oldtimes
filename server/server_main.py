@@ -11,6 +11,7 @@ from .ot_creature import random_creature_name
 from .ot_party import Party, PartyMember
 from .ot_scenario import OTScenarioPlayer, OTScenarioManager
 
+import copy
 import os
 import sys
 import json
@@ -118,7 +119,7 @@ def rest_put_scenario_start():
   user = get_user()
   req = json.loads(request.data)
   print('scenario name=[' + req['name'] + ']')
-  scenario = scenario_manager.get_scenario_by_name(req['name'])
+  scenario = copy.deepcopy(scenario_manager.get_scenario_by_name(req['name']))
 
   user.scenario_player = OTScenarioPlayer(scenario, user.party)
   return jsonify({'ok': True})
