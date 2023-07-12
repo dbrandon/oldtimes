@@ -7,15 +7,28 @@ from .ot_util import OTUtil
 import copy
 import uuid
 
+class ScenarioRoom:
+  def __init__(self) -> None:
+    pass
+  
+
 class OTScenario:
   def __init__(self, id:uuid.UUID, raw:dict) -> None:
     self._uuid = id
     if raw != None:
       self._name = OTUtil.get_str(raw, 'name')
+
+    self._load_rooms(OTUtil.get_dict(raw, 'room-info'))
+
     self._monsters = list[Monster]()
     raw_monsters = OTUtil.get_list(raw, 'monsters')
     for raw_monster in raw_monsters:
       self._monsters.append(Monster.fromRaw(raw_monster))
+
+  def _load_rooms(self, raw:dict):
+    default_room = OTUtil.get_str(raw, 'default')
+    print('default room = ' + default_room)
+    self._rooms = list[ScenarioRoom]()
 
   def clone(self) -> 'OTScenario':
     return copy.deepcopy(self)

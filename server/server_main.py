@@ -124,11 +124,18 @@ def rest_put_scenario_start():
   user.scenario_player = OTScenarioPlayer(scenario, user.party)
   return jsonify({'ok': True})
 
+
+@OTApp.route('/rest/scenario/status')
+@flask_login.login_required
+def rest_get_scenario_status():
+  user = get_user()
+  return jsonify({'ok': True, 'status': user.scenario_player.get_status()})
+
 @OTApp.route('/rest/scenario/next-status')
 @flask_login.login_required
 def rest_get_scenario_next_status():
   user = get_user()
-  return jsonify({'ok': True, 'nextStatus': user.scenario_player.get_next_status()})
+  return jsonify({'ok': True, 'status': user.scenario_player.get_next_status()})
 
 
 @OTApp.route('/rest/scenario.monsters')
