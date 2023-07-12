@@ -7,12 +7,18 @@ from .ot_util import OTUtil
 import copy
 import uuid
 
-class ScenarioRoom:
-  def __init__(self) -> None:
-    pass
+class OTRoomDefinition:
+  def __init__(self, raw:dict) -> None:
+    self._name = OTUtil.get_str(raw, 'name')
+    enter = OTUtil.get_dict(raw, 'on-enter')
+    self._say = OTUtil.get_str(enter, 'say')
+
+  @property
+  def name(self) -> str:
+    return self._name
   
 
-class OTScenario:
+class OTScenarioDefinition:
   def __init__(self, id:uuid.UUID, raw:dict) -> None:
     self._uuid = id
     if raw != None:
@@ -28,14 +34,25 @@ class OTScenario:
   def _load_rooms(self, raw:dict):
     default_room = OTUtil.get_str(raw, 'default')
     print('default room = ' + default_room)
-    self._rooms = list[ScenarioRoom]()
+    self._rooms = list[OTRoomDefinition]()
+    raw_rooms = OTUtil.get_list(raw, 'stages')
+    for raw_room in raw_rooms:
+      room = OTRoomDefinition(raw_room)
+      self._rooms.append(room)
+      if room.name == default_room:
+        print('Found default room = ' + default_room)
+        self._initial_room = room
 
-  def clone(self) -> 'OTScenario':
+  def clone(self) -> 'OTScenarioDefinition':
     return copy.deepcopy(self)
 
   @property
   def id(self) -> uuid.UUID:
     return self._uuid
+  
+  @property
+  def initial_room(self) -> OTRoomDefinition:
+    return self._initial_room
 
   @property
   def name(self) -> str:
@@ -60,11 +77,11 @@ class OTScenario:
 
 class OTScenarioManager:
   def __init__(self) -> None:
-    self._scenario_list = list[OTScenario]()
+    self._scenario_list = list[OTScenarioDefinition]()
 
     print('Load scenarios...')
     for entry in OTUtil.get_scenario_files():
-      scen = OTScenario(OTUtil.get_name_as_uuid(entry), OTUtil.load_yaml(entry))
+      scen = OTScenarioDefinition(OTUtil.get_name_as_uuid(entry), OTUtil.load_yaml(entry))
       print('   -> Loaded ' + str(scen.id) + ' with name =[' + scen.name + ']')
       self._scenario_list.append(scen)
 
@@ -81,14 +98,28 @@ class OTScenarioManager:
     for s in self._scenario_list:
       brief_list.append(s.get_brief())
     return brief_list
-      
 
-class OTScenarioPlayer:
-  def __init__(self, scenario: OTScenario, party:Party) -> None:
+
+class OTRoomInstance:
+  def __init__(self, room:OTRoomDefinition) -> None:
+    self._room = room
+    pass
+
+  @property
+  def name(self) -> str:
+    return self._room.name
+  
+  @property
+  def on_enter(self) -> str:
+    return self._room._say
+
+
+class OTScenarioInstance:
+  def __init__(self, scenario: OTScenarioDefinition, party:Party) -> None:
     self._scenario = scenario
     self._party = party
     self._finished = False
-
+    self._cur_room = OTRoomInstance(scenario.initial_room)
     pass
 
   def attack(self) -> list[str]:
@@ -104,6 +135,16 @@ class OTScenarioPlayer:
       result.append('All opponents have been vanquished!')
       self._finished = True
     return result
+  
+  def get_status(self):
+    return {
+      'roomName': self._cur_room.name,
+      'onEnter': self._cur_room.on_enter
+    }
+
+  def get_next_status(self):
+    pass
+
 
   @property
   def is_finished(self) -> bool:
@@ -118,6 +159,6 @@ class OTScenarioPlayer:
     return self._party.members
 
   @property
-  def scenario(self) -> OTScenario:
+  def scenario(self) -> OTScenarioDefinition:
     return self._scenario
   
