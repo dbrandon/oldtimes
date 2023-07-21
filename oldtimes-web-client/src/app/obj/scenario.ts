@@ -1,5 +1,5 @@
 
-export class Scenario {
+export class ScenarioInfo {
   constructor(
     private _name: string,
     private _id: string
@@ -13,3 +13,41 @@ export class Scenario {
     return this._name;
   }
 };
+
+
+class ScenarioAction {
+  constructor(private _name: string) {
+
+  }
+
+  public get name() {
+    return this._name;
+  }
+}
+
+class ScenarioEvent {
+  constructor(private _text: string) {}
+
+  public get text() {
+    return this._text;
+  }
+}
+
+export class ScenarioStatus {
+  constructor(
+    private _roomName: string,
+    private _events: ScenarioEvent[],
+    private _actions: ScenarioAction[]) {}
+
+  public get actions() {
+    return this._actions;
+  }
+
+  public get roomName() {
+    return this._roomName;
+  }
+
+  public get events() {
+    return this._events;
+  }
+}

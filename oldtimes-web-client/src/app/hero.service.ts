@@ -5,7 +5,7 @@ import { Observable, map, of, tap, share, Subject, Subscriber, mergeMap } from '
 import { MessageService } from './message.service';
 import { HttpClient } from '@angular/common/http';
 import { Party } from './obj/party_member';
-import { Scenario } from './obj/scenario';
+import { ScenarioInfo, ScenarioStatus } from './obj/scenario';
 import { Monster } from './obj/monster';
 
 interface HResp {
@@ -27,8 +27,12 @@ interface PartyResponse extends SimpleResponse {
   party: Party,
 }
 
+interface ScenarioStatusResponse extends SimpleResponse {
+  status: ScenarioStatus;
+}
+
 interface ScenarioResponse extends SimpleResponse {
-  scenarioList: Scenario[];
+  scenarioList: ScenarioInfo[];
 }
 
 interface SimpleAttackResponse extends SimpleResponse {
@@ -100,18 +104,25 @@ export class HeroService {
     ));
   }
 
-  getScenarioList(): Observable<Scenario[]> {
+  getScenarioList(): Observable<ScenarioInfo[]> {
     console.log('request scenarios');
     return this.afterUsername(result => this.http.get<ScenarioResponse>('/rest/scenario/list').pipe(
       map(resp => resp.scenarioList),
       tap(list => this.log('received scenario list: ' + list.length + ' options'))
-    ))
+    ));
   }
 
-  startScenario(scenario: Scenario): Observable<SimpleResponse> {
+  startScenario(scenario: ScenarioInfo): Observable<SimpleResponse> {
     return this.afterUsername(result => this.http.put<SimpleResponse>('/rest/scenario/start', scenario).pipe(
       tap(resp => this.log('started scenario ' + scenario.name))
     ))
+  }
+
+  getScenarioStatus(): Observable<ScenarioStatus> {
+    return this.afterUsername(result => this.http.get<ScenarioStatusResponse>('/rest/scenario/status').pipe(
+      tap(resp => this.log('got status for scenario, room=' + resp.status.roomName)),
+      map(resp => resp.status)
+    ));
   }
 
   simpleAttack(): Observable<string[]> {

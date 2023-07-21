@@ -121,7 +121,7 @@ def rest_put_scenario_start():
   print('scenario name=[' + req['name'] + ']')
   scenario = copy.deepcopy(scenario_manager.get_scenario_by_name(req['name']))
 
-  user.scenario_player = OTScenarioInstance(scenario, user.party)
+  user._scenario_instance = OTScenarioInstance(scenario, user.party)
   return jsonify({'ok': True})
 
 
@@ -129,26 +129,26 @@ def rest_put_scenario_start():
 @flask_login.login_required
 def rest_get_scenario_status():
   user = get_user()
-  return jsonify({'ok': True, 'status': user.scenario_player.get_status()})
+  return jsonify({'ok': True, 'status': user._scenario_instance.get_status()})
 
-@OTApp.route('/rest/scenario/next-status')
-@flask_login.login_required
-def rest_get_scenario_next_status():
-  user = get_user()
-  return jsonify({'ok': True, 'status': user.scenario_player.get_next_status()})
+# @OTApp.route('/rest/scenario/next-status')
+# @flask_login.login_required
+# def rest_get_scenario_next_status():
+#   user = get_user()
+#   return jsonify({'ok': True, 'status': user._scenario_instance.get_next_status()})
 
 
-@OTApp.route('/rest/scenario.monsters')
+@OTApp.route('/rest/scenario/monsters')
 @flask_login.login_required
 def rest_get_secnario_monsters():
   user = get_user()
-  return jsonify({'ok': True, 'monsterList': user.scenario_player.scenario.getMonstersObj()})
+  return jsonify({'ok': True, 'monsterList': user._scenario_instance.scenario.getMonstersObj()})
 
 @OTApp.route('/rest/scenario/attack')
 @flask_login.login_required
 def rest_scenario_attack():
   user = get_user()
-  return jsonify({'ok': True, 'messageList': user.scenario_player.attack()})
+  return jsonify({'ok': True, 'messageList': user._scenario_instance.attack()})
 
 OTUserManager = UserManager()
 

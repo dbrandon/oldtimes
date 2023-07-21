@@ -139,11 +139,15 @@ class OTScenarioInstance:
   def get_status(self):
     return {
       'roomName': self._cur_room.name,
-      'onEnter': self._cur_room.on_enter
+      'events': [
+        { 'text': 'The party has entered ' + self._cur_room.name },
+        { 'text': self._cur_room.on_enter },
+      ],
+      'actions': [
+        { 'name': 'Look' },
+        { 'name': 'Search' },
+      ],
     }
-
-  def get_next_status(self):
-    pass
 
 
   @property

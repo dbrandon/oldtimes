@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HeroService } from '../hero.service';
 import { Party } from '../obj/party_member';
-import { Scenario } from '../obj/scenario';
+import { ScenarioInfo } from '../obj/scenario';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 export class SelectScenarioComponent implements OnInit {
   public party: Party = new Party();
 
-  public scenarioList: Scenario[] = [];
+  public scenarioList: ScenarioInfo[] = [];
 
   constructor(private heroService : HeroService,
     private _router: Router) { }
@@ -30,7 +30,7 @@ export class SelectScenarioComponent implements OnInit {
     this.heroService.getScenarioList().subscribe(list => this.scenarioList = list);
   }
 
-  startScenario(scenario: Scenario) {
+  startScenario(scenario: ScenarioInfo) {
     this.heroService.startScenario(scenario).subscribe(r => {
       this._router.navigateByUrl('/play-scenario');
     })

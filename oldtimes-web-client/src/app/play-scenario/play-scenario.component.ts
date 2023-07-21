@@ -16,6 +16,7 @@ export class PlayScenarioComponent implements OnInit {
   constructor(private heroService: HeroService) { }
 
   ngOnInit(): void {
+    this.getScenarioStatus();
     this.getParty();
     this.getMonsters();
   }
@@ -26,6 +27,12 @@ export class PlayScenarioComponent implements OnInit {
 
   getParty() {
     this.heroService.getParty().subscribe(party => this.party = party);
+  }
+
+  getScenarioStatus() {
+    this.heroService.getScenarioStatus().subscribe(resp => {
+      resp.events.forEach(e => console.log('event text=[' + e.text + ']'))
+    })
   }
 
   attack() {
