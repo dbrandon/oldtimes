@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Party } from '../obj/party_member';
 import { HeroService } from '../hero.service';
 import { Monster } from '../obj/monster';
+import { ScenarioAction } from '../obj/scenario';
 
 @Component({
   selector: 'app-play-scenario',
@@ -12,6 +13,8 @@ export class PlayScenarioComponent implements OnInit {
   public monsterList: Monster[] = [];
   public party: Party = new Party();
   public messageList: string[] = [];
+
+  public actionList: ScenarioAction[] = [];
 
   constructor(private heroService: HeroService) { }
 
@@ -32,6 +35,17 @@ export class PlayScenarioComponent implements OnInit {
   getScenarioStatus() {
     this.heroService.getScenarioStatus().subscribe(resp => {
       resp.events.forEach(e => console.log('event text=[' + e.text + ']'))
+      resp.actions.forEach(e => console.log('Action: [' + e.name + ']"'));
+      this.actionList = resp.actions;
+    })
+  }
+
+  handleAction(action: ScenarioAction) {
+    this.heroService.runAction(action).subscribe(resp => {
+      resp.events.forEach(e => console.log('event text=[' + e.text + ']'));
+      if(resp.actions != null) {
+        this.actionList = resp.actions;
+      }
     })
   }
 

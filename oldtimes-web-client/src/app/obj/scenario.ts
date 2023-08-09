@@ -15,7 +15,7 @@ export class ScenarioInfo {
 };
 
 
-class ScenarioAction {
+export class ScenarioAction {
   constructor(private _name: string) {
 
   }

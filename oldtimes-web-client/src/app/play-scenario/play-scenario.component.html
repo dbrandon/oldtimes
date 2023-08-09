@@ -3,6 +3,10 @@
   <span class="scenario-play-area">
     <p>play-scenario works!</p>
     <button (click)="attack()">Attack!</button>
+    <div *ngIf="actionList.length > 0">
+      <h3>Actions:</h3>
+      <button *ngFor="let action of actionList" (click)="handleAction(action)">{{action.name}}</button>
+    </div>
     <h3>Combat Log</h3>
     <div>
       <div *ngFor="let msg of messageList">{{msg}}</div>

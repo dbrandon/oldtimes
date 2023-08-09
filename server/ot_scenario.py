@@ -13,6 +13,15 @@ class OTRoomDefinition:
     enter = OTUtil.get_dict(raw, 'on-enter')
     self._say = OTUtil.get_str(enter, 'say')
 
+    self._hidden_items : list[str] = []
+
+    hidden = OTUtil.get_list(raw, 'hidden')
+    for h in hidden:
+      item = OTUtil.get_dict(h, 'item')
+      desc = OTUtil.get_str(item, 'description')
+      self._hidden_items.append(desc)
+      print('  Room contains hidden item: ' + desc)
+
   @property
   def name(self) -> str:
     return self._name
@@ -103,6 +112,9 @@ class OTScenarioManager:
 class OTRoomInstance:
   def __init__(self, room:OTRoomDefinition) -> None:
     self._room = room
+    self._initial_enter = True
+    self._hidden_items = room._hidden_items.copy()
+    self._items : list[str] = []
     pass
 
   @property
@@ -112,6 +124,52 @@ class OTRoomInstance:
   @property
   def on_enter(self) -> str:
     return self._room._say
+  
+  def get_actions(self):
+    actions = [
+      { 'name': 'Look' },
+      { 'name': 'Search' }
+    ]
+    for item in self._items:
+      actions.append({ 'name': 'Pick up ' + item})
+    return actions
+  
+  def get_events(self):
+    events = []
+    if self._initial_enter:
+      self._initial_enter = False
+      events.append({ 'text': 'The party has entered ' + self.name })
+      if self._room._say != '':
+        events.append({ 'text': self._room._say })
+
+    return events
+  
+  def get_status(self):
+    return {
+      'roomName': self.name,
+      'events': self.get_events(),
+      'actions': self.get_actions()
+    }
+
+  def run_action(self, action: str):
+    events = self.get_events()
+
+    if action['name'] == 'Search':
+      if len(self._hidden_items) > 0:
+        item = self._hidden_items.pop()
+        self._items.append(item)
+        events.append({ 'text': 'You dig around and find ' + item })
+      else:
+        events.append({ 'text': 'You search but did not find anything' })
+    
+    elif action['name'] == 'Look':
+      events.append({ 'text': self._room._say })
+
+    return {
+      'roomName': self.name,
+      'events': events,
+      'actions': self.get_actions(),
+    }
 
 
 class OTScenarioInstance:
@@ -137,17 +195,10 @@ class OTScenarioInstance:
     return result
   
   def get_status(self):
-    return {
-      'roomName': self._cur_room.name,
-      'events': [
-        { 'text': 'The party has entered ' + self._cur_room.name },
-        { 'text': self._cur_room.on_enter },
-      ],
-      'actions': [
-        { 'name': 'Look' },
-        { 'name': 'Search' },
-      ],
-    }
+    return self._cur_room.get_status()
+  
+  def run_action(self, action):
+    return self._cur_room.run_action(action)
 
 
   @property

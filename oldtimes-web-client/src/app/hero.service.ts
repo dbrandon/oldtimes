@@ -5,7 +5,7 @@ import { Observable, map, of, tap, share, Subject, Subscriber, mergeMap } from '
 import { MessageService } from './message.service';
 import { HttpClient } from '@angular/common/http';
 import { Party } from './obj/party_member';
-import { ScenarioInfo, ScenarioStatus } from './obj/scenario';
+import { ScenarioAction, ScenarioInfo, ScenarioStatus } from './obj/scenario';
 import { Monster } from './obj/monster';
 
 interface HResp {
@@ -121,6 +121,13 @@ export class HeroService {
   getScenarioStatus(): Observable<ScenarioStatus> {
     return this.afterUsername(result => this.http.get<ScenarioStatusResponse>('/rest/scenario/status').pipe(
       tap(resp => this.log('got status for scenario, room=' + resp.status.roomName)),
+      map(resp => resp.status)
+    ));
+  }
+
+  runAction(action: ScenarioAction): Observable<ScenarioStatus> {
+    return this.afterUsername(result => this.http.put<ScenarioStatusResponse>('/rest/scenario/action', action).pipe(
+      tap(resp => this.log('got response for action ' + action.name + '=>' + JSON.stringify(resp, null, 2))),
       map(resp => resp.status)
     ));
   }

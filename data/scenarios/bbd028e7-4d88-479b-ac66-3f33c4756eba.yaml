@@ -5,6 +5,11 @@ room-info:
     - name: Room 1
       on-enter:
         say: "You have entered the old storage room"
+      hidden:
+        - item:
+            description: A worn key
+        - item:
+            description: A silver coin
 
 monsters:
   - name: Tickle Monster
