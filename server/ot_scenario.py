@@ -144,14 +144,14 @@ class OTRoomInstance:
 
     return events
   
-  def get_status(self):
+  def get_status(self, party: Party):
     return {
       'roomName': self.name,
       'events': self.get_events(),
       'actions': self.get_actions()
     }
 
-  def run_action(self, action: str):
+  def run_action(self, action: str, party: Party):
     events = self.get_events()
 
     if action['name'] == 'Search':
@@ -164,6 +164,18 @@ class OTRoomInstance:
     
     elif action['name'] == 'Look':
       events.append({ 'text': self._room._say })
+
+    else:
+      found = False
+      for item in self._items:
+        if action['name'] == 'Pick up ' + item:
+          events.append({ 'text': 'You picked up ' + item })
+          self._items.remove(item)
+          found = True
+          break
+
+      if not found:
+        events.append({ 'text': 'Unknown action: ' + action['name']})
 
     return {
       'roomName': self.name,
@@ -195,10 +207,10 @@ class OTScenarioInstance:
     return result
   
   def get_status(self):
-    return self._cur_room.get_status()
+    return self._cur_room.get_status(self.party)
   
   def run_action(self, action):
-    return self._cur_room.run_action(action)
+    return self._cur_room.run_action(action, self.party)
 
 
   @property
