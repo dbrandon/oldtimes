@@ -4,5 +4,6 @@
 Flask
 flask-login
 flask-restful
+PyYAML
 
 namegenerator
